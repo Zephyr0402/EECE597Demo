@@ -1,0 +1,36 @@
+.nav-dreamy {
+  background-color: #002FA7;  /* klein blue */
+}
+
+.nav-dreamy .navbar-brand,
+.nav-dreamy .nav-link {
+  color: #fff; /* white text */
+}
+
+.white-toggler {
+  border-color: white;
+}
+
+.white-toggler .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.white-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.navbar-padding {
+  padding-left: 20px;
+  padding-right: 20px; 
+}
+
+.game-grid-margin {
+  margin-top: 20px;
+}
+
+.avatar-img {
+  width: 40px;
+  height: 40px;
+}
+
