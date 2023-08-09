@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Image } from 'react-bootstrap';
 import '../App.css';
-import { connectMetaMask } from '../APIs/APIs';
 import { Web3Auth } from "@web3auth/modal";
 import Web3 from 'web3';
 import NFT_ABI from '../ABI/SimpleERC721.json';
