@@ -34,13 +34,7 @@
   height: 40px;
 }
 
-.memory-game {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  margin-top: 50px;
-}
-
-.board {
+.memory-game-board {
   width: 320px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -48,7 +42,7 @@
   margin: 0 auto;
 }
 
-.card {
+.memory-game-card {
   width: 70px;
   height: 100px;
   background-color: gray;
@@ -58,5 +52,6 @@
   font-size: 24px;
   cursor: pointer;
 }
+
 
 

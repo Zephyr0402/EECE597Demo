@@ -7,7 +7,7 @@ const games = [
   },
   {
     id: '2',
-    name: 'Game 2',
+    name: 'MemoryGame',
     description: 'This is a description for Game 2.',
     imageUrl: './game_images/game_2.png',
   },
