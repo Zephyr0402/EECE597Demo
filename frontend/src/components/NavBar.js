@@ -63,6 +63,7 @@ function NavBar() {
       if (window.confirm('Do you want to log out?')) {
         await web3auth.logout();
         setAvatarUrl('avatar.jpg');
+        setUserData(null);
       }
     } else {
       const web3authProvider = await web3auth.connect();
@@ -126,14 +127,6 @@ function NavBar() {
           className="avatar-img"
           onClick={handleAvatarClick} // Handle click event
         />
-        {/* <GoogleLogin
-          onSuccess={credentialResponse => {
-            console.log(credentialResponse);
-          }}
-          onError={() => {
-            console.log('Login Failed');
-          }}
-        />; */}
 
       </Navbar.Collapse>
     </Navbar>

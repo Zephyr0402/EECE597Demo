@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Container, Row, Col, Card, Button, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import gameList from '../data/games'; 
+import gameList from '../data/games';
 import { UserContext } from '../UserContext';
 import '../App.css';
 
@@ -11,12 +11,12 @@ function GameGrid() {
 
   const handleGamePlay = (gameId) => {
     if (!userData) {
-      setShowModal(true);
+        setShowModal(true);
     } else {
-      // Redirect to the game page if the user is logged in
-      window.location.href = `/game/${gameId}`;
+        // Redirect to the game page if the user is logged in
+        window.location.href = `/game/${gameId}`;
     }
-  };
+};
 
   const handleClose = () => {
     setShowModal(false);
@@ -49,11 +49,6 @@ function GameGrid() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Link to="/login">
-            <Button variant="primary">
-              Login
-            </Button>
-          </Link>
         </Modal.Footer>
       </Modal>
     </Container>
