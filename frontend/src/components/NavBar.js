@@ -49,6 +49,12 @@ function NavBar() {
           setProvider(web3authInstance.provider);
         }
         setWeb3auth(web3authInstance);  // Set web3auth here
+
+        // Check for avatar in local storage
+        const savedAvatarUrl = localStorage.getItem('avatarUrl');
+        if (savedAvatarUrl) {
+            setAvatarUrl(savedAvatarUrl);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -63,6 +69,7 @@ function NavBar() {
       if (window.confirm('Do you want to log out?')) {
         await web3auth.logout();
         setAvatarUrl('avatar.jpg');
+        localStorage.removeItem('avatarUrl'); // Remove the avatar URL from local storage
         setUserData(null);
       }
     } else {
@@ -109,6 +116,7 @@ function NavBar() {
 
       // Set the HTTP URL as the avatar
       setAvatarUrl(httpImageUrl);
+      localStorage.setItem('avatarUrl', httpImageUrl); // Save the avatar URL to local storage
       setUserData(userInfo);
     }
   };

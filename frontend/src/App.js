@@ -10,7 +10,8 @@ import { UserContext } from './UserContext';
 
 
 function App() {
-  const [userData, setUserData] = useState(null);
+  const initialAvatarUrl = localStorage.getItem('avatarUrl') || 'avatar.jpg';
+  const [userData, setUserData] = useState({ avatarUrl: initialAvatarUrl });
 
   return (
     <UserContext.Provider value={{ userData, setUserData }}>
