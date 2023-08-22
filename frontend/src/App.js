@@ -6,15 +6,14 @@ import GameGrid from './components/GameGrid';
 // import GamePage from './components/GamePage';
 import Gobang from './components/Gobang';
 import MemoryGame from './components/MemoryGame';
-import { UserContext } from './UserContext';
+import Web3AuthContext from './Web3AuthContext';
 
 
 function App() {
-  const initialAvatarUrl = localStorage.getItem('avatarUrl') || 'avatar.jpg';
-  const [userData, setUserData] = useState({ avatarUrl: initialAvatarUrl });
+  const [web3auth, setWeb3auth] = useState(null);
 
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
+    <Web3AuthContext.Provider value={{ web3auth, setWeb3auth }}>
       <Router>
         <NavBar />
         <Switch>
@@ -23,7 +22,7 @@ function App() {
           <Route path="/game/2" component={MemoryGame} />
         </Switch>
       </Router>
-    </UserContext.Provider>
+    </Web3AuthContext.Provider>
   );
 }
 

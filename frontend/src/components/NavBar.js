@@ -5,55 +5,59 @@ import { Web3Auth } from "@web3auth/modal";
 import Web3 from 'web3';
 import NFT_ABI from '../ABI/SimpleERC721.json';
 import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
-import { UserContext } from '../UserContext';
+import Web3AuthContext from '../Web3AuthContext';
 
 const NFT_ADDRESS = "0xF66BC0373D2345112F008b0DaC44463a86E2dCAe";
 
 function NavBar() {
-  const [web3auth, setWeb3auth] = useState(null);
+  const { web3auth, setWeb3auth } = useContext(Web3AuthContext);
   const [provider, setProvider] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState('avatar.jpg');
-  const { setUserData } = useContext(UserContext);
 
   useEffect(() => {
     const init = async () => {
       try {
-        const web3authInstance = new Web3Auth({
-          clientId: "BCbclsdWIz4v0qoul50MEUdiacaGdvkNHDurmjgQap7Kl-tr4fMdDAir06PYN275EgN-99qtQn2OASm667TCHdU", // Get your Client ID from Web3Auth Dashboard
-          chainConfig: {
-            chainNamespace: "eip155",
-            chainId: "0x13881", // Please use 0x5 for Goerli Testnet Sepolia
-            rpcTarget: "https://rpc.ankr.com/polygon_mumbai",
-          },
-        });
-        const torusWalletAdapter = new TorusWalletAdapter({
-          initParams: {
-            // type WhiteLabelParams
-            whiteLabel: {
-              theme: {
-                isDark: true,
-                colors: { torusBrand1: "#FFA500" },
-              },
-              logoDark: "https://images.web3auth.io/web3auth-logo-w.svg",
-              logoLight: "https://images.web3auth.io/web3auth-logo-w-light.svg",
-              topupHide: true,
-              featuredBillboardHide: true,
-              disclaimerHide: true,
-              defaultLanguage: "en",
-            },
-          },
-        });
-        web3authInstance.configureAdapter(torusWalletAdapter);
-        await web3authInstance.initModal();
-        if (web3authInstance.provider) {
-          setProvider(web3authInstance.provider);
-        }
-        setWeb3auth(web3authInstance);  // Set web3auth here
-
         // Check for avatar in local storage
         const savedAvatarUrl = localStorage.getItem('avatarUrl');
         if (savedAvatarUrl) {
             setAvatarUrl(savedAvatarUrl);
+        }
+        // Check if user is logged in
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (isLoggedIn !== 'true') {
+          const web3authInstance = new Web3Auth({
+            clientId: "BCbclsdWIz4v0qoul50MEUdiacaGdvkNHDurmjgQap7Kl-tr4fMdDAir06PYN275EgN-99qtQn2OASm667TCHdU", // Get your Client ID from Web3Auth Dashboard
+            chainConfig: {
+              chainNamespace: "eip155",
+              chainId: "0x13881", // Please use 0x5 for Goerli Testnet Sepolia
+              rpcTarget: "https://rpc.ankr.com/polygon_mumbai",
+            },
+          });
+          const torusWalletAdapter = new TorusWalletAdapter({
+            initParams: {
+              // type WhiteLabelParams
+              whiteLabel: {
+                theme: {
+                  isDark: true,
+                  colors: { torusBrand1: "#FFA500" },
+                },
+                logoDark: "https://images.web3auth.io/web3auth-logo-w.svg",
+                logoLight: "https://images.web3auth.io/web3auth-logo-w-light.svg",
+                topupHide: true,
+                featuredBillboardHide: true,
+                disclaimerHide: true,
+                defaultLanguage: "en",
+              },
+            },
+          });
+          web3authInstance.configureAdapter(torusWalletAdapter);
+          await web3authInstance.initModal();
+          if (web3authInstance.provider) {
+            setProvider(web3authInstance.provider);
+          }
+          setWeb3auth(web3authInstance);
+        } else {
+            // User is not logged in or their session has expired.
         }
       } catch (error) {
         console.error(error);
@@ -65,12 +69,21 @@ function NavBar() {
 
   const handleAvatarClick = async (response) => {
     //Initialize within your constructor
+    const savedWeb3auth = localStorage.getItem('web3auth');
+    console.log("saved web3");
+    console.log(savedWeb3auth);
+    if (savedWeb3auth) {
+      setWeb3auth(savedWeb3auth);
+      console.log(savedWeb3auth);
+    }
     if (web3auth.connected) {
       if (window.confirm('Do you want to log out?')) {
         await web3auth.logout();
         setAvatarUrl('avatar.jpg');
-        localStorage.removeItem('avatarUrl'); // Remove the avatar URL from local storage
-        setUserData(null);
+        localStorage.removeItem('avatarUrl');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('web3auth');
+        setWeb3auth(null);
       }
     } else {
       const web3authProvider = await web3auth.connect();
@@ -116,8 +129,11 @@ function NavBar() {
 
       // Set the HTTP URL as the avatar
       setAvatarUrl(httpImageUrl);
-      localStorage.setItem('avatarUrl', httpImageUrl); // Save the avatar URL to local storage
-      setUserData(userInfo);
+      setWeb3auth(web3auth);
+      console.log(web3auth);
+      localStorage.setItem('web3auth', web3auth);
+      localStorage.setItem('avatarUrl', httpImageUrl);
+      localStorage.setItem('isLoggedIn', 'true');
     }
   };
 
