@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
-import Web3AuthContext from '../Web3AuthContext';
+import React, { useState, useEffect } from 'react';
 
 function MemoryGame() {
     const cards = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D'];
     const [shuffledCards, setShuffledCards] = useState([]);
     const [flippedIndices, setFlippedIndices] = useState([]);
     const [matchedIndices, setMatchedIndices] = useState([]);
-
-    const { web3auth } = useContext(Web3AuthContext);
 
     useEffect(() => {
         setShuffledCards(shuffle([...cards]));

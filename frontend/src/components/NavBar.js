@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Image } from 'react-bootstrap';
 import '../App.css';
 import { Web3Auth } from "@web3auth/modal";
 import Web3 from 'web3';
 import NFT_ABI from '../ABI/SimpleERC721.json';
 import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
-import Web3AuthContext from '../Web3AuthContext';
 
 const NFT_ADDRESS = "0xF66BC0373D2345112F008b0DaC44463a86E2dCAe";
 
 function NavBar() {
-  const { web3auth, setWeb3auth } = useContext(Web3AuthContext);
+  const [ web3auth, setWeb3auth] = useState(null);
   const [provider, setProvider] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState('avatar.jpg');
 
@@ -76,14 +75,16 @@ function NavBar() {
       setWeb3auth(savedWeb3auth);
       console.log(savedWeb3auth);
     }
+
     if (web3auth.connected) {
       if (window.confirm('Do you want to log out?')) {
         await web3auth.logout();
-        setAvatarUrl('avatar.jpg');
         localStorage.removeItem('avatarUrl');
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('web3auth');
         setWeb3auth(null);
+        setAvatarUrl('avatar.jpg');
+        window.location.href = `/`;
       }
     } else {
       const web3authProvider = await web3auth.connect();
