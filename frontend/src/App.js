@@ -6,7 +6,6 @@ import GameGrid from './components/GameGrid';
 import Gobang from './components/Gobang';
 import MemoryGame from './components/MemoryGame';
 
-
 function App() {
   return (
     <Router>

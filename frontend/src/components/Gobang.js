@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import socketIOClient from "socket.io-client";
 import NFT_ABI from '../ABI/GobangUserProfile.json';
 import Web3 from 'web3';
-import {connectMetaMask} from "../APIs/APIs";
 
 const SIZE = 15;
 

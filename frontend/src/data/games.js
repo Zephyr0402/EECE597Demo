@@ -13,8 +13,8 @@ const games = [
   },
   {
     id: '3',
-    name: 'Game 3',
-    description: 'This is a description for Game 3.',
+    name: 'More to come',
+    description: 'More games are comming in the way',
     imageUrl: './game_images/game_3.jpeg',
   },
   // Add more games as needed
