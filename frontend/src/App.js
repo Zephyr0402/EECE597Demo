@@ -5,11 +5,15 @@ import NavBar from './components/NavBar';
 import GameGrid from './components/GameGrid';
 import Gobang from './components/Gobang';
 import MemoryGame from './components/MemoryGame';
+import { Web3authHelper } from './ChainlessJS/Web3authHelper';
+import { Web3Helper } from './ChainlessJS/Web3Helper';
 
 function App() {
   const [web3auth, setWeb3auth] = useState(null);
   const [web3, setWeb3] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState('avatar.jpg');
+  const [web3Helper, setWeb3Helper] = useState(new Web3Helper());
+  const [web3authHelper, setWeb3authHelper] = useState(new Web3authHelper());
 
   const history = useHistory();
 
@@ -17,15 +21,9 @@ function App() {
     const handleBeforeUnload = (event) => {
       event.preventDefault();
       event.returnValue = "";
-    //   localStorage.setItem("pageReloaded", "true");
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
-
-    // if (localStorage.getItem("pageReloaded")) {
-    //   history.push("/");
-    //   localStorage.removeItem("pageReloaded");
-    // }
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -34,13 +32,13 @@ function App() {
 
   return (
     <Router>
-      <NavBar web3auth={web3auth} setWeb3auth={setWeb3auth} web3={web3} setWeb3={setWeb3} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />
+      <NavBar web3Helper={web3Helper} setWeb3Helper={setWeb3Helper} web3authHelper={web3authHelper} setWeb3authHelper={setWeb3authHelper} web3auth={web3auth} setWeb3auth={setWeb3auth} web3={web3} setWeb3={setWeb3} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />
       <Switch>
         <Route path="/" exact component={GameGrid} />
         <Route path="/game/1" component={Gobang} />
         <Route 
           path="/game/2" 
-          render={(props) => <MemoryGame {...props} web3auth={web3auth} web3={web3} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />} 
+          render={(props) => <MemoryGame {...props} web3Helper={web3Helper} web3authHelper={web3authHelper} web3auth={web3auth} web3={web3} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />} 
         />
       </Switch>
     </Router>

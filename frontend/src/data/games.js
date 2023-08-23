@@ -3,7 +3,7 @@ const games = [
     id: '1',
     name: 'Gobang',
     description: 'A nice description',
-    imageUrl: './game_images/game_1.jpg',
+    imageUrl: './game_images/game_1.png',
   },
   {
     id: '2',
@@ -14,7 +14,7 @@ const games = [
   {
     id: '3',
     name: 'More to come',
-    description: 'More games are comming in the way',
+    description: 'More games are comming in the way...',
     imageUrl: './game_images/game_3.jpeg',
   },
   // Add more games as needed
