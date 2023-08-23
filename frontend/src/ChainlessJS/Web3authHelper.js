@@ -48,10 +48,18 @@ export class Web3authHelper{
 
     async loginWeb3auth() {
         if (!this.checkWeb3auth()) {
-            console.log('hey');
             return false;
         } else {
             this.web3authProvider = await this.web3auth.connect();
+            return true;
+        }
+    }
+
+    async logoutWeb3auth() {
+        if (!this.checkWeb3auth()) {
+            return false;
+        } else {
+            await this.web3auth.logout();
             return true;
         }
     }

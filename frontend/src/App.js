@@ -32,13 +32,13 @@ function App() {
 
   return (
     <Router>
-      <NavBar web3Helper={web3Helper} setWeb3Helper={setWeb3Helper} web3authHelper={web3authHelper} setWeb3authHelper={setWeb3authHelper} web3auth={web3auth} setWeb3auth={setWeb3auth} web3={web3} setWeb3={setWeb3} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />
+      <NavBar web3Helper={web3Helper} setWeb3Helper={setWeb3Helper} web3authHelper={web3authHelper} setWeb3authHelper={setWeb3authHelper} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />
       <Switch>
         <Route path="/" exact component={GameGrid} />
         <Route path="/game/1" component={Gobang} />
         <Route 
           path="/game/2" 
-          render={(props) => <MemoryGame {...props} web3Helper={web3Helper} web3authHelper={web3authHelper} web3auth={web3auth} web3={web3} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />} 
+          render={(props) => <MemoryGame {...props} web3Helper={web3Helper} web3authHelper={web3authHelper} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />} 
         />
       </Switch>
     </Router>

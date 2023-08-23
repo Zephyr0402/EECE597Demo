@@ -1,23 +1,18 @@
+import '../App.css';
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Image } from 'react-bootstrap';
-import '../App.css';
-import { Web3Auth } from "@web3auth/modal";
-import Web3 from 'web3';
-import NFT_ABI from '../ABI/SimpleERC721.json';
-import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
 import { Link, useHistory } from 'react-router-dom';
+
 import { Web3authHelper } from '../ChainlessJS/Web3authHelper';
 import { Web3Helper } from '../ChainlessJS/Web3Helper';
 import { NFTContract } from '../ChainlessJS/NFTContract';
 
-function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, web3auth, setWeb3auth, web3, setWeb3, avatarUrl, setAvatarUrl }) {
+function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, avatarUrl, setAvatarUrl }) {
     const history = useHistory();
     const clientId = "BCbclsdWIz4v0qoul50MEUdiacaGdvkNHDurmjgQap7Kl-tr4fMdDAir06PYN275EgN-99qtQn2OASm667TCHdU";
     const chainNamespace = "eip155";
     const chainId = "0x13881";
     const rpcTarget = "https://rpc.ankr.com/polygon_mumbai";
-    // const [web3authHelper, setWeb3authHelper] = useState(new Web3authHelper());
-    // const [web3Helper, setWeb3Helper] = useState(new Web3Helper());
 
     useEffect(() => {
         const init = async () => {
@@ -25,8 +20,7 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
                 // Check if user is logged in
                 const isLoggedIn = localStorage.getItem('isLoggedIn');
                 if (isLoggedIn !== 'true') {
-                    const web3authInstance = await web3authHelper.createWeb3authLoginInstance(clientId, chainNamespace, chainId, rpcTarget);
-                    setWeb3auth(web3authInstance);
+                    await web3authHelper.createWeb3authLoginInstance(clientId, chainNamespace, chainId, rpcTarget);
                 }
             } catch (error) {
                 console.error(error);
@@ -43,26 +37,25 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
     };
 
     const handleAvatarClick = async (response) => {
-        if (!web3auth) {
+        if (!web3authHelper.checkWeb3auth()) {
             window.alert('Login expired, refreshing...');
             localStorage.removeItem('avatarUrl');
             localStorage.removeItem('isLoggedIn');
-            setWeb3auth(null);
+            setWeb3authHelper(null);
             setAvatarUrl('avatar.jpg');
             history.push('/');
-            const web3authInstance = await web3authHelper.createWeb3authLoginInstance(clientId, chainNamespace, chainId, rpcTarget);
+            await web3authHelper.createWeb3authLoginInstance(clientId, chainNamespace, chainId, rpcTarget);
         }
 
-      if (web3auth.connected) {
+      if (web3authHelper.isConnected()) {
           if (window.confirm('Do you want to log out?')) {
-              await web3auth.logout();
+              await web3authHelper.logoutWeb3auth();
               localStorage.removeItem('avatarUrl');
               localStorage.removeItem('isLoggedIn');
-              setWeb3auth(null);
+              setWeb3authHelper(null);
               setAvatarUrl('avatar.jpg');
               history.push('/');
-              const web3authInstance = await web3authHelper.createWeb3authLoginInstance(clientId, chainNamespace, chainId, rpcTarget);
-              setWeb3auth(web3authInstance);
+              await web3authHelper.createWeb3authLoginInstance(clientId, chainNamespace, chainId, rpcTarget);
           }
       } else {
           await web3authHelper.loginWeb3auth();
@@ -93,10 +86,8 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
 
           // Set the HTTP URL as the avatar
           setAvatarUrl(httpImageUrl);
-          setWeb3auth(web3auth);
           setWeb3Helper(web3Helper);
           // setWeb3(web3Helper.getWeb3Instance());
-          console.log(web3auth);
           localStorage.setItem('avatarUrl', httpImageUrl);
           localStorage.setItem('isLoggedIn', 'true');
       }

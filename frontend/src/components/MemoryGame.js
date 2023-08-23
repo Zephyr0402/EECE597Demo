@@ -127,47 +127,54 @@ function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
     const elapsedTime = startTime && endTime ? Math.floor((endTime - startTime) / 1000) : 0;  
   
     return (
-        <div>
-          <h2>User Profile</h2>
-          <p>Name: {userName}</p>
-          <p>Completion Time: {completionTime ? `${completionTime} seconds` : "None"}</p>
-          <button onClick={fetchUserProfile}>Refresh Profile</button>
-          <div>
-            <input value={userName} onChange={e => setUserName(e.target.value)} placeholder="User Name"/>
-            <input value={avatarUrl} onChange={e => setAvatarUrl(e.target.value)} placeholder="Avatar URL"/>
-            <button onClick={() => updateProfile(userName, avatarUrl)}>Update Profile</button>
-          </div>
-          <div className="memory-game">
-              {gameActive ? (
-                  <>
-                    <button onClick={abortGame}>Abort Challenge</button>
-                    <div className="memory-game-board">
-                        {shuffledCards.map((card, index) => (
-                            <div
-                                key={index}
-                                className="memory-game-card"
-                                onClick={() => handleCardClick(index)}
-                            >
-                                {(flippedIndices.includes(index) || matchedIndices.includes(index)) ? card : "?"}
+        <div className="container mt-5">
+            <h2 className="mb-4">User Profile</h2>
+            <div className="mb-3">
+                <label className="form-label">Name:</label>
+                <input value={userName} onChange={e => setUserName(e.target.value)} className="form-control" placeholder="User Name"/>
+            </div>
+            <div className="mb-3">
+                <label className="form-label">Avatar URL:</label>
+                <input value={avatarUrl} onChange={e => setAvatarUrl(e.target.value)} className="form-control" placeholder="Avatar URL"/>
+            </div>
+            <button onClick={() => updateProfile(userName, avatarUrl)} className="btn btn-primary mb-3">Update Profile</button>
+
+            <p className="mb-3">Best completion Time: {completionTime ? `${completionTime} seconds` : "None"}</p>
+            <button onClick={fetchUserProfile} className="btn btn-secondary mb-3">Refresh Profile</button>
+
+            <div className="memory-game">
+                {gameActive ? (
+                    <>
+                        <button onClick={abortGame} className="btn btn-danger mb-3">Abort Challenge</button>
+                        <div className="memory-game-board d-flex flex-wrap">
+                            {shuffledCards.map((card, index) => (
+                                <div
+                                    key={index}
+                                    className="memory-game-card m-2 card text-center"
+                                    style={{ width: '100px', height: '100px', lineHeight: '100px' }}
+                                    onClick={() => handleCardClick(index)}
+                                >
+                                    {(flippedIndices.includes(index) || matchedIndices.includes(index)) ? card : "?"}
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        {matchedIndices.length === cards.length ? (
+                            <div className="game-summary">
+                                <p className="mb-3">You've finished in {elapsedTime} seconds!</p>
+                                <button onClick={startGame} className="btn btn-success">Play Again</button>
                             </div>
-                        ))}
-                    </div>
-                  </>
-              ) : (
-                  <>
-                      {matchedIndices.length === cards.length ? (
-                          <div className="game-summary">
-                              <p>You've finished in {elapsedTime} seconds!</p>
-                              <button onClick={startGame}>Play Again</button>
-                          </div>
-                      ) : (
-                          <button onClick={startGame}>Start Game</button>
-                      )}
-                  </>
-              )}
-          </div>
+                        ) : (
+                            <button onClick={startGame} className="btn btn-primary">Start Game</button>
+                        )}
+                    </>
+                )}
+            </div>
         </div>
     );
+
 }
 
 function shuffle(array) {
