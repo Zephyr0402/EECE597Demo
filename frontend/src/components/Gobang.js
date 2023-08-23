@@ -30,8 +30,8 @@ function Gobang() {
         const defaultAccount = accounts[0];
         setUserAddress(defaultAccount);
 
-        // Specify your contract's ABI and address.
-        const contractAddress = "0x96ACAc928E166AEB616dA5aCEF589b666eD1d802"; // Replace with your contract's address.
+        // Specify contract's ABI and address.
+        const contractAddress = "0x96ACAc928E166AEB616dA5aCEF589b666eD1d802";
         const contract = new web3.eth.Contract(NFT_ABI.abi, contractAddress);
 
         // Set the user profile state.

@@ -8,8 +8,7 @@ import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
 
 const NFT_ADDRESS = "0xF66BC0373D2345112F008b0DaC44463a86E2dCAe";
 
-function NavBar() {
-  const [ web3auth, setWeb3auth] = useState(null);
+function NavBar({ web3auth, setWeb3auth, web3, setWeb3}) {
   const [provider, setProvider] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState('avatar.jpg');
 
@@ -68,12 +67,23 @@ function NavBar() {
 
   const handleAvatarClick = async (response) => {
     //Initialize within your constructor
-    const savedWeb3auth = localStorage.getItem('web3auth');
-    console.log("saved web3");
-    console.log(savedWeb3auth);
-    if (savedWeb3auth) {
-      setWeb3auth(savedWeb3auth);
-      console.log(savedWeb3auth);
+    // const savedWeb3auth = localStorage.getItem('web3auth');
+    // console.log("saved web3");
+    // if (savedWeb3auth) {
+    //   setWeb3auth(savedWeb3auth);
+    //   console.log("savedweb3auth");
+    //   console.log(savedWeb3auth);
+    // } else {
+    //   console.log("savedweb3auth is null");
+    // }
+
+    if (!web3auth) {
+      window.alert('Login expired, refreshing...');
+      localStorage.removeItem('avatarUrl');
+      localStorage.removeItem('isLoggedIn');
+      setWeb3auth(null);
+      setAvatarUrl('avatar.jpg');
+      window.location.href = `/`;
     }
 
     if (web3auth.connected) {
@@ -81,7 +91,6 @@ function NavBar() {
         await web3auth.logout();
         localStorage.removeItem('avatarUrl');
         localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('web3auth');
         setWeb3auth(null);
         setAvatarUrl('avatar.jpg');
         window.location.href = `/`;
@@ -105,6 +114,7 @@ function NavBar() {
         return
       }
       const web3 = new Web3(web3authProvider);
+      
       console.log("get accounts");
       const userAccounts = await web3.eth.getAccounts();
       console.log(userAccounts);
@@ -131,8 +141,8 @@ function NavBar() {
       // Set the HTTP URL as the avatar
       setAvatarUrl(httpImageUrl);
       setWeb3auth(web3auth);
+      setWeb3(web3);
       console.log(web3auth);
-      localStorage.setItem('web3auth', web3auth);
       localStorage.setItem('avatarUrl', httpImageUrl);
       localStorage.setItem('isLoggedIn', 'true');
     }
