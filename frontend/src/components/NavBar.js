@@ -8,9 +8,9 @@ import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
 
 const NFT_ADDRESS = "0xF66BC0373D2345112F008b0DaC44463a86E2dCAe";
 
-function NavBar({ web3auth, setWeb3auth, web3, setWeb3}) {
+function NavBar({ web3auth, setWeb3auth, web3, setWeb3, avatarUrl, setAvatarUrl }) {
   const [provider, setProvider] = useState(null);
-  const [avatarUrl, setAvatarUrl] = useState('avatar.jpg');
+  // const [avatarUrl, setAvatarUrl] = useState('avatar.jpg');
 
   useEffect(() => {
     const init = async () => {

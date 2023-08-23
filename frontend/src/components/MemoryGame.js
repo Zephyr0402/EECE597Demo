@@ -3,7 +3,7 @@ import MemoryGameProfileJSON from '../ABI/MemoryGameProfile.json';
 
 // 0xE7Ea5f23B1Fb3290c6230996c4032E2555c645d5
 
-function MemoryGame({ web3auth, web3 }) {
+function MemoryGame({ web3auth, web3, avatarUrl, setAvatarUrl }) {
   const cards = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D'];
   const [shuffledCards, setShuffledCards] = useState([]);
   const [flippedIndices, setFlippedIndices] = useState([]);
@@ -12,7 +12,6 @@ function MemoryGame({ web3auth, web3 }) {
   const [endTime, setEndTime] = useState(null);
   const [gameActive, setGameActive] = useState(false);  
   const [userName, setUserName] = useState("");
-  const [avatar, setAvatar] = useState("");
   const [completionTime, setCompletionTime] = useState(null);  
   const contractAddress = "0x6f13891DbD3D00503CD5cBD283a6e375Bc80E4EB";  
   
@@ -42,7 +41,7 @@ function MemoryGame({ web3auth, web3 }) {
       const contract = new web3.eth.Contract(MemoryGameProfileJSON.abi, contractAddress);
       const profile = await contract.methods.getUserProfile(playerAccounts[0]).call();
       setUserName(profile.userName);
-      setAvatar(profile.userAvatar);
+      setAvatarUrl(profile.userAvatar);
     } catch (error) {
       console.error("Error fetching user profile:", error);
     }
@@ -133,13 +132,12 @@ function MemoryGame({ web3auth, web3 }) {
     <div>
       <h2>User Profile</h2>
       <p>Name: {userName}</p>
-      <p>Avatar: <img src={avatar} alt="User Avatar" /></p>
       <p>Completion Time: {completionTime ? `${completionTime} seconds` : "None"}</p>
-      <button onClick={fetchUserProfile}>Refresh Profile</button> {/* Here's the new button */}
+      <button onClick={fetchUserProfile}>Refresh Profile</button>
       <div>
         <input value={userName} onChange={e => setUserName(e.target.value)} placeholder="User Name"/>
-        <input value={avatar} onChange={e => setAvatar(e.target.value)} placeholder="Avatar URL"/>
-        <button onClick={() => updateProfile(userName, avatar)}>Update Profile</button>
+        <input value={avatarUrl} onChange={e => setAvatarUrl(e.target.value)} placeholder="Avatar URL"/>
+        <button onClick={() => updateProfile(userName, avatarUrl)}>Update Profile</button>
       </div>
       <div className="memory-game">
           {gameActive ? (
