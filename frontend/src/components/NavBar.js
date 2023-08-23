@@ -5,12 +5,13 @@ import { Web3Auth } from "@web3auth/modal";
 import Web3 from 'web3';
 import NFT_ABI from '../ABI/SimpleERC721.json';
 import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
+import { Link, useHistory } from 'react-router-dom';
 
 const NFT_ADDRESS = "0xF66BC0373D2345112F008b0DaC44463a86E2dCAe";
 
 function NavBar({ web3auth, setWeb3auth, web3, setWeb3, avatarUrl, setAvatarUrl }) {
   const [provider, setProvider] = useState(null);
-  // const [avatarUrl, setAvatarUrl] = useState('avatar.jpg');
+  const history = useHistory();
 
   useEffect(() => {
     const init = async () => {
@@ -65,6 +66,12 @@ function NavBar({ web3auth, setWeb3auth, web3, setWeb3, avatarUrl, setAvatarUrl 
     init();
   }, []);
 
+  const handleHomeClick = () => {
+    // Change avatarUrl (or reset to default) when Home link is clicked
+    const mainAvatarURL = localStorage.getItem('avatarUrl');
+    setAvatarUrl(mainAvatarURL);
+  };
+
   const handleAvatarClick = async (response) => {
     //Initialize within your constructor
     // const savedWeb3auth = localStorage.getItem('web3auth');
@@ -83,7 +90,38 @@ function NavBar({ web3auth, setWeb3auth, web3, setWeb3, avatarUrl, setAvatarUrl 
       localStorage.removeItem('isLoggedIn');
       setWeb3auth(null);
       setAvatarUrl('avatar.jpg');
-      window.location.href = `/`;
+      history.push('/');
+      const web3authInstance = new Web3Auth({
+            clientId: "BCbclsdWIz4v0qoul50MEUdiacaGdvkNHDurmjgQap7Kl-tr4fMdDAir06PYN275EgN-99qtQn2OASm667TCHdU", // Get your Client ID from Web3Auth Dashboard
+            chainConfig: {
+              chainNamespace: "eip155",
+              chainId: "0x13881", // Please use 0x5 for Goerli Testnet Sepolia
+              rpcTarget: "https://rpc.ankr.com/polygon_mumbai",
+            },
+          });
+          const torusWalletAdapter = new TorusWalletAdapter({
+            initParams: {
+              // type WhiteLabelParams
+              whiteLabel: {
+                theme: {
+                  isDark: true,
+                  colors: { torusBrand1: "#FFA500" },
+                },
+                logoDark: "https://images.web3auth.io/web3auth-logo-w.svg",
+                logoLight: "https://images.web3auth.io/web3auth-logo-w-light.svg",
+                topupHide: true,
+                featuredBillboardHide: true,
+                disclaimerHide: true,
+                defaultLanguage: "en",
+              },
+            },
+          });
+          web3authInstance.configureAdapter(torusWalletAdapter);
+          await web3authInstance.initModal();
+          if (web3authInstance.provider) {
+            setProvider(web3authInstance.provider);
+          }
+          setWeb3auth(web3authInstance);
     }
 
     if (web3auth.connected) {
@@ -93,7 +131,38 @@ function NavBar({ web3auth, setWeb3auth, web3, setWeb3, avatarUrl, setAvatarUrl 
         localStorage.removeItem('isLoggedIn');
         setWeb3auth(null);
         setAvatarUrl('avatar.jpg');
-        window.location.href = `/`;
+        history.push('/');
+        const web3authInstance = new Web3Auth({
+            clientId: "BCbclsdWIz4v0qoul50MEUdiacaGdvkNHDurmjgQap7Kl-tr4fMdDAir06PYN275EgN-99qtQn2OASm667TCHdU", // Get your Client ID from Web3Auth Dashboard
+            chainConfig: {
+              chainNamespace: "eip155",
+              chainId: "0x13881", // Please use 0x5 for Goerli Testnet Sepolia
+              rpcTarget: "https://rpc.ankr.com/polygon_mumbai",
+            },
+          });
+          const torusWalletAdapter = new TorusWalletAdapter({
+            initParams: {
+              // type WhiteLabelParams
+              whiteLabel: {
+                theme: {
+                  isDark: true,
+                  colors: { torusBrand1: "#FFA500" },
+                },
+                logoDark: "https://images.web3auth.io/web3auth-logo-w.svg",
+                logoLight: "https://images.web3auth.io/web3auth-logo-w-light.svg",
+                topupHide: true,
+                featuredBillboardHide: true,
+                disclaimerHide: true,
+                defaultLanguage: "en",
+              },
+            },
+          });
+          web3authInstance.configureAdapter(torusWalletAdapter);
+          await web3authInstance.initModal();
+          if (web3authInstance.provider) {
+            setProvider(web3authInstance.provider);
+          }
+          setWeb3auth(web3authInstance);
       }
     } else {
       const web3authProvider = await web3auth.connect();
@@ -154,7 +223,7 @@ function NavBar({ web3auth, setWeb3auth, web3, setWeb3, avatarUrl, setAvatarUrl 
       <Navbar.Toggle aria-controls="basic-navbar-nav" className="white-toggler" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link href="/">Home</Nav.Link>
+          <Link to="/" className="nav-link" onClick={handleHomeClick}>Home</Link>
         </Nav>
         <Image
           src={avatarUrl} // Fetch avatar image from NFT

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
@@ -11,22 +11,26 @@ function App() {
   const [web3, setWeb3] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState('avatar.jpg');
 
+  const history = useHistory();
+
   useEffect(() => {
-    // Function to display the warning
     const handleBeforeUnload = (event) => {
-        event.preventDefault();
-        event.returnValue = "Refresh the page will require login again";
+      event.preventDefault();
+      event.returnValue = "";
+    //   localStorage.setItem("pageReloaded", "true");
     };
 
-    // Add the event listener
     window.addEventListener("beforeunload", handleBeforeUnload);
 
-    // Cleanup function
-    return () => {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+    // if (localStorage.getItem("pageReloaded")) {
+    //   history.push("/");
+    //   localStorage.removeItem("pageReloaded");
+    // }
 
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [history]);
 
   return (
     <Router>

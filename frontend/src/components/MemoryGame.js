@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MemoryGameProfileJSON from '../ABI/MemoryGameProfile.json';
+import { useHistory } from 'react-router-dom';
 
 // 0xE7Ea5f23B1Fb3290c6230996c4032E2555c645d5
 
@@ -13,7 +14,9 @@ function MemoryGame({ web3auth, web3, avatarUrl, setAvatarUrl }) {
   const [gameActive, setGameActive] = useState(false);  
   const [userName, setUserName] = useState("");
   const [completionTime, setCompletionTime] = useState(null);  
-  const contractAddress = "0x6f13891DbD3D00503CD5cBD283a6e375Bc80E4EB";  
+  
+  const contractAddress = "0x6f13891DbD3D00503CD5cBD283a6e375Bc80E4EB";
+  const history = useHistory();
   
   useEffect(() => {
     if (gameActive && matchedIndices.length === cards.length) {
@@ -25,7 +28,9 @@ function MemoryGame({ web3auth, web3, avatarUrl, setAvatarUrl }) {
       const completionTime = Math.floor((end - startTime) / 1000);
       updateCompletionTime(completionTime);
     }
-}, [matchedIndices]);  
+  }, [matchedIndices]);
+  
+  
 
   
   useEffect(() => {
