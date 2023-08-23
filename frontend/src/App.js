@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import GameGrid from './components/GameGrid';
@@ -11,7 +11,21 @@ function App() {
   const [web3, setWeb3] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState('avatar.jpg');
 
+  useEffect(() => {
+    // Function to display the warning
+    const handleBeforeUnload = (event) => {
+        event.preventDefault();
+        event.returnValue = "Refresh the page will require login again";
+    };
 
+    // Add the event listener
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Cleanup function
+    return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
 
   return (
