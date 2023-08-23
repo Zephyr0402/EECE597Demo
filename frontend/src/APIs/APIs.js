@@ -1,5 +1,7 @@
-import contractABI from './GobangUserProfile.json';
 import Web3 from 'web3';
+import { Web3Auth } from "@web3auth/modal";
+import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
+import contractABI from './GobangUserProfile.json';
 
 export const connectMetaMask = async () => {
     if (typeof window.ethereum !== 'undefined') {
