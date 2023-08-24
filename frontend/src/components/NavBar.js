@@ -1,10 +1,7 @@
 import '../App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Navbar, Nav, Image } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-
-import { Web3authHelper } from '../ChainlessJS/Web3authHelper';
-import { Web3Helper } from '../ChainlessJS/Web3Helper';
 import { NFTContract } from '../ChainlessJS/NFTContract';
 
 function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, avatarUrl, setAvatarUrl }) {
@@ -41,7 +38,6 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
             window.alert('Login expired, refreshing...');
             localStorage.removeItem('avatarUrl');
             localStorage.removeItem('isLoggedIn');
-            setWeb3authHelper(null);
             setAvatarUrl('avatar.jpg');
             history.push('/');
             await web3authHelper.createWeb3authLoginInstance(clientId, chainNamespace, chainId, rpcTarget);
@@ -52,7 +48,6 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
               await web3authHelper.logoutWeb3auth();
               localStorage.removeItem('avatarUrl');
               localStorage.removeItem('isLoggedIn');
-              setWeb3authHelper(null);
               setAvatarUrl('avatar.jpg');
               history.push('/');
               await web3authHelper.createWeb3authLoginInstance(clientId, chainNamespace, chainId, rpcTarget);
@@ -68,21 +63,25 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
           }
           web3Helper.createWeb3Instance(web3authHelper.getWeb3authInstanceProvider());
           const userAccounts = await web3Helper.getAccounts();
-          const contract = new NFTContract();
-          contract.createContractInstance(web3Helper.getWeb3Instance());
-          const tokenID = await contract.tokenOfOwnerByIndex(accounts[0].address, 0);
-          const tokenURI = await contract.tokenURI(tokenID);
+          var httpImageUrl = "avatar.jpg";
+          if (userAccounts[0] == "0x63f5fA9eCACBD0C512A334B5db3Eba24603F3043") {
+              const contract = new NFTContract();
+              contract.createContractInstance(web3Helper.getWeb3Instance());
+              const tokenID = await contract.tokenOfOwnerByIndex(accounts[0].address, 0);
+              const tokenURI = await contract.tokenURI(tokenID);
 
-          const httpTokenUri = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
+              const httpTokenUri = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
 
-          // Fetch the metadata JSON from IPFS
-          const metadata = await fetch(httpTokenUri).then(response => response.json());
+              // Fetch the metadata JSON from IPFS
+              const metadata = await fetch(httpTokenUri).then(response => response.json());
 
-          // Extract the image property, which is an IPFS URL
-          const ipfsImageUrl = metadata.image;
+              // Extract the image property, which is an IPFS URL
+              const ipfsImageUrl = metadata.image;
 
-          // Convert the IPFS image URL to an HTTP URL
-          const httpImageUrl = ipfsImageUrl.replace('ipfs://', 'https://ipfs.io/ipfs/');
+              // Convert the IPFS image URL to an HTTP URL
+              httpImageUrl = ipfsImageUrl.replace('ipfs://', 'https://ipfs.io/ipfs/');
+          }
+          
 
           // Set the HTTP URL as the avatar
           setAvatarUrl(httpImageUrl);

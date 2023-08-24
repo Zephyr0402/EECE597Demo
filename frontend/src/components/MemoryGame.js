@@ -11,21 +11,16 @@ function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
     const [matchedIndices, setMatchedIndices] = useState([]);
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
-    const [gameActive, setGameActive] = useState(false);  
+    const [gameActive, setGameActive] = useState(false);
     const [userName, setUserName] = useState("");
-    const [completionTime, setCompletionTime] = useState(null); 
-    
+    const [completionTime, setCompletionTime] = useState(null);
     const [contract, setContract] = useState(new MemoryGameProfile());
-    
-    const contractAddress = "0x6f13891DbD3D00503CD5cBD283a6e375Bc80E4EB";
-    const history = useHistory();
-  
+
     useEffect(() => {
         if (gameActive && matchedIndices.length === cards.length) {
             const end = new Date();  // Get the current time
             setEndTime(end);  // Store it in the state for other usages
             setGameActive(false);
-            
             // Calculate the difference using the direct value
             const completionTime = Math.floor((end - startTime) / 1000);
             updateCompletionTime(completionTime);
@@ -38,14 +33,21 @@ function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
             fetchUserProfile();
             fetchGameCompletionTime();
         }
-    }, [web3Helper, web3authHelper]);  
-  
+    }, [web3Helper, web3authHelper]);
+
     const fetchUserProfile = async () => {
         try {
             const playerAccounts = await web3Helper.getAccounts();
             const profile = await contract.getUserProfile(playerAccounts[0]);
+            console.log("hey");
+            console.log(profile);
+            if (profile.userAvatar == '') {
+                setAvatarUrl("avatar.jpg");
+            } else {
+                setAvatarUrl(profile.userAvatar);
+            }
             setUserName(profile.userName);
-            setAvatarUrl(profile.userAvatar);
+
         } catch (error) {
             console.error("Error fetching user profile:", error);
         }
@@ -60,19 +62,18 @@ function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
             console.error("Error fetching game completion time:", error);
         }
     };
-  
+
     const updateProfile = async (newName, newAvatar) => {
         try {
             const playerAccounts = await web3Helper.getAccounts();
             await contract.updateUserProfile(playerAccounts[0], newName, newAvatar);
-            
             // Update the local state after successful update
             fetchUserProfile();
         } catch (error) {
             console.error("Error updating profile:", error);
         }
-    };  
-  
+    };
+
     const updateCompletionTime = async (newTime) => {
         try {
             const playerAccounts = await web3Helper.getAccounts();

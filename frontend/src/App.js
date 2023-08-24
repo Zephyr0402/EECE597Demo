@@ -35,9 +35,12 @@ function App() {
       <NavBar web3Helper={web3Helper} setWeb3Helper={setWeb3Helper} web3authHelper={web3authHelper} setWeb3authHelper={setWeb3authHelper} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />
       <Switch>
         <Route path="/" exact component={GameGrid} />
-        <Route path="/game/1" component={Gobang} />
-        <Route 
-          path="/game/2" 
+        <Route
+          path="/game/1"
+          render={(props) => <Gobang {...props} web3Helper={web3Helper} web3authHelper={web3authHelper} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />} 
+        />
+        <Route
+          path="/game/2"
           render={(props) => <MemoryGame {...props} web3Helper={web3Helper} web3authHelper={web3authHelper} avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl} />} 
         />
       </Switch>
