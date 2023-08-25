@@ -7,6 +7,7 @@ The demo takes the form of a online game center platform, contains two games for
 # Web3 dependencies
 
 <code>web3</code>
+
 <code>@web3auth/modal</code>
 
 # How to deploy smart contracts
