@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 contract GobangUserProfile {
     struct UserProfile {
         string username;
-        string avatarUrl; // added avatarUrl
+        string avatarUrl; 
         uint256 matchCount;
         uint256 winningCount;
         uint256 rank;
@@ -17,7 +17,7 @@ contract GobangUserProfile {
         string memory username,
         string memory avatarUrl
     ) public {
-        profiles[userAddress] = UserProfile(username, avatarUrl, 0, 0, 0);  // use avatarUrl
+        profiles[userAddress] = UserProfile(username, avatarUrl, 0, 0, 0); 
     }
 
     function incrementMatchCount(address userAddress) public {
@@ -32,17 +32,17 @@ contract GobangUserProfile {
         profiles[userAddress].rank = newRank;
     }
 
-    function updateUserProfile(address userAddress, string memory username, string memory avatarUrl, uint256 matchCount, uint256 winningCount, uint256 rank) public {  // added avatarUrl parameter
+    function updateUserProfile(address userAddress, string memory username, string memory avatarUrl, uint256 matchCount, uint256 winningCount, uint256 rank) public {  
         UserProfile storage profile = profiles[userAddress];
         profile.username = username;
-        profile.avatarUrl = avatarUrl; // update avatarUrl
+        profile.avatarUrl = avatarUrl;
         profile.matchCount = matchCount;
         profile.winningCount = winningCount;
         profile.rank = rank;
     }
 
-    function getUserProfile(address userAddress) public view returns (string memory, string memory, uint256, uint256, uint256) { // added avatarUrl in return type
+    function getUserProfile(address userAddress) public view returns (string memory, string memory, uint256, uint256, uint256) { 
         UserProfile storage profile = profiles[userAddress];
-        return (profile.username, profile.avatarUrl, profile.matchCount, profile.winningCount, profile.rank); // return avatarUrl
+        return (profile.username, profile.avatarUrl, profile.matchCount, profile.winningCount, profile.rank); 
     }
 }
