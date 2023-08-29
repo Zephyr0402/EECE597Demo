@@ -9,7 +9,6 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
     const [currentPlayer, setCurrentPlayer] = useState(null);
     const [winner, setWinner] = useState(null);
     const [socket, setSocket] = useState(null);
-    const [gameId, setGameId] = useState('1');
     const [playerColor, setPlayerColor] = useState(null);
     const [isGameReady, setIsGameReady] = useState(false);
     const [contract, setContract] = useState(new GobangUserProfile());
@@ -19,12 +18,33 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
     const [matchCount, setMatchCount] = useState(0);
     const [rank, setRank] = useState(0);
 
+    const gameId = 1;
+
     useEffect(() => {
         if (web3Helper && web3authHelper) {
             contract.createContractInstance(web3Helper.getWeb3Instance());
             fetchUserProfile();
         }
     }, [web3Helper, web3authHelper]);
+
+
+    useEffect(() => {
+        const newSocket = socketIOClient('http://localhost:3001');
+        setSocket(newSocket);
+        newSocket.emit('createGame', gameId);
+        newSocket.on('gameReady', game => {
+            console.log('game ready!');
+            setIsGameReady(true);
+        });
+        newSocket.on('gameUpdate', game => {
+            console.log('game update!');
+            setPlayerColor(game.currentPlayer);
+            setGrid(game.grid);
+            setCurrentPlayer(game.currentPlayer);
+            setWinner(game.winner);
+        });
+        return () => newSocket.close();
+    }, [setSocket]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -47,6 +67,10 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
         try {
             const playerAccounts = await web3Helper.getAccounts();
             await contract.updateUserProfile(playerAccounts[0], playerAccounts[0], userName, avatarUrl, matchCount, winningCount, rank);
+            if (winner != null) {
+                updateWinningCount();
+                setWinner(null);
+            }
         } catch (error) {
             console.error("Error updating user profile:", error);
             throw error;
@@ -55,14 +79,16 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
 
     const fetchUserProfile = async () => {
         try {
+            console.log(avatarUrl);
             const playerAccounts = await web3Helper.getAccounts();
             const profile = await contract.getUserProfile(playerAccounts[0]);
-            if (profile[1] === '') {
-                setAvatarUrl("avatar.jpg");
-            } else {
-                setAvatarUrl(profile[1]);
+            let newAvatarURL = "signin.png";
+            if (profile[1] != '') {
+                newAvatarURL = profile[1];
             }
             setUserName(profile[0]);
+            setAvatarUrl(newAvatarURL);
+            console.log(avatarUrl);
             setWinningCount(profile[2]);
             setMatchCount(profile[3]);
             setRank(profile[4]);
@@ -89,28 +115,6 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
         socket.emit('makeMove', { gameId, row, col });
     };
 
-    useEffect(() => {
-        const newSocket = socketIOClient('http://localhost:3001');
-        setSocket(newSocket);
-        newSocket.emit('createGame', gameId);
-        newSocket.on('gameReady', game => {
-            console.log('game ready!');
-            setIsGameReady(true);
-        });
-        newSocket.on('gameUpdate', game => {
-            console.log('game update!');
-            setPlayerColor(game.currentPlayer);
-            setGrid(game.grid);
-            setCurrentPlayer(game.currentPlayer);
-            setWinner(game.winner);
-            console.log(game.winner);
-            if (winner != null) {
-                updateWinningCount();
-            }
-        });
-        return () => newSocket.close();
-    }, [setSocket, gameId]);
-
     const updateWinningCount = async () => {
         const playerAccounts = await web3Helper.getAccounts();
         await contract.incrementMatchCount(playerAccounts[0], playerAccounts[0]);
@@ -132,7 +136,7 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
                     </div>
                 ))}
                 {isGameReady && <h3 className="mt-3">The game is ready!</h3>}
-                {winner && <h2 className="mt-3">{winner} won the game!</h2>}
+                {winner && <h2 className="mt-3">{winner} chess won the game!</h2>}
             </div>
             <div className="card">
                 <div className="card-header">User Profile</div>

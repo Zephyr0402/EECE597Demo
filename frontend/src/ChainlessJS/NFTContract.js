@@ -1,4 +1,3 @@
-import Web3 from 'web3';
 import contractJSON from '../ABI/SimpleERC721.json';
 export class NFTContract {
   constructor() {

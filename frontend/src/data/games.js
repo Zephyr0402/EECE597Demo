@@ -2,13 +2,13 @@ const games = [
   {
     id: '1',
     name: 'Gobang',
-    description: 'A nice description',
+    description: 'Gobang, also called Five in a Row, is an abstract strategy board game.',
     imageUrl: './game_images/game_1.png',
   },
   {
     id: '2',
     name: 'MemoryGame',
-    description: 'This is a description for Game 2.',
+    description: 'Level up your memory for free with this online memory card game.',
     imageUrl: './game_images/game_2.png',
   },
   {
@@ -17,7 +17,6 @@ const games = [
     description: 'More games are comming in the way...',
     imageUrl: './game_images/game_3.png',
   },
-  // Add more games as needed
 ];
 
 export default games;

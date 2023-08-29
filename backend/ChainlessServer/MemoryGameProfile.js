@@ -1,5 +1,5 @@
-import contractJSON from '../ABI/MemoryGameProfile.json';
-export default class MemoryGameProfile {
+const contractJSON = require('../ABI/MemoryGameProfile.json');
+class MemoryGameProfile {
   constructor() {
      this.web3 = null;
      this.contract = null;

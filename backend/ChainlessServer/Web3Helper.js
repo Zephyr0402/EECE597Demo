@@ -1,6 +1,6 @@
-import Web3 from 'web3';
+const web3 = require('web3');
 
-export default class Web3Helper {
+class Web3Helper {
     constructor() {
         this.web3 = null;
         this.authProvider = null;

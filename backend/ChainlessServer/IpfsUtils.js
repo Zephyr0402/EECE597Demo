@@ -1,14 +1,9 @@
-import * as IPFS from 'ipfs-http-client';
+const IPFS = require('ipfs-http-client');
 
-export class IpfsUtils {
+class IpfsUtils {
     constructor() {
         this.node = null;
         this.metadataIndex = new Map();
-    }
-
-    // Read image file in specified path
-    readImageFile(path) {
-        return fs.readFileSync(path);
     }
 
     // Start IPFS node

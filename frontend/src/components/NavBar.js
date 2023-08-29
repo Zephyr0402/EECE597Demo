@@ -12,6 +12,11 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
     const rpcTarget = "https://rpc.ankr.com/polygon_mumbai";
 
     useEffect(() => {
+        console.log("Avatar URL changed in Navbar:", avatarUrl);
+    }, [avatarUrl]);
+
+
+    useEffect(() => {
         const init = async () => {
             try {
                 // Check if user is logged in
@@ -44,7 +49,10 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
 
       if (web3authHelper.isConnected()) {
           if (window.confirm('Do you want to log out?')) {
-              await web3authHelper.logoutWeb3auth();
+              const isSuccess = await web3authHelper.logoutWeb3auth();
+              if (!isSuccess) {
+                window.alert('Login session has error, refreshing...');
+              }
               localStorage.removeItem('avatarUrl');
               localStorage.removeItem('isLoggedIn');
               setAvatarUrl('avatar.jpg');
@@ -63,7 +71,7 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
           web3Helper.createWeb3Instance(web3authHelper.getWeb3authInstanceProvider());
           const userAccounts = await web3Helper.getAccounts();
           var httpImageUrl = "avatar.jpg";
-          if (userAccounts[0] == "0x63f5fA9eCACBD0C512A334B5db3Eba24603F3043") {
+          if (userAccounts[0] === "0x63f5fA9eCACBD0C512A334B5db3Eba24603F3043") {
               const contract = new NFTContract();
               contract.createContractInstance(web3Helper.getWeb3Instance());
               const tokenID = await contract.tokenOfOwnerByIndex(accounts[0].address, 0);
@@ -79,6 +87,8 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
 
               // Convert the IPFS image URL to an HTTP URL
               httpImageUrl = ipfsImageUrl.replace('ipfs://', 'https://ipfs.io/ipfs/');
+          } else {
+              httpImageUrl = "signin.png";
           }
           setAvatarUrl(httpImageUrl);
           setWeb3Helper(web3Helper);
@@ -88,22 +98,22 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
     };
 
   return (
-    <Navbar className="nav-dreamy navbar-padding" expand="lg">
-      <Navbar.Brand href="/">Game Platform</Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" className="white-toggler" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-          <Link to="/" className="nav-link" onClick={handleHomeClick}>Home</Link>
-        </Nav>
-        <Image
-          src={avatarUrl} // Fetch avatar image from NFT
-          roundedCircle
-          className="avatar-img"
-          onClick={handleAvatarClick} // Handle click event
-        />
+      <Navbar className="nav-dreamy navbar-padding" expand="lg">
+        <Navbar.Brand href="/">Game Platform</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" className="white-toggler" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Link to="/" className="nav-link" onClick={handleHomeClick}>Home</Link>
+          </Nav>
+          <Image
+            src={avatarUrl}
+            roundedCircle
+            className="avatar-img"
+            onClick={handleAvatarClick}
+          />
 
-      </Navbar.Collapse>
-    </Navbar>
+        </Navbar.Collapse>
+      </Navbar>
   );
 }
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import MemoryGameProfile from '../ChainlessJS/MemoryGameProfile';
 
 function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl, testContract }) {
@@ -48,8 +47,8 @@ function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl, testC
         try {
             const playerAccounts = await web3Helper.getAccounts();
             const profile = await currentContract.getUserProfile(playerAccounts[0]);
-            if (profile.userAvatar == '') {
-                setAvatarUrl("avatar.jpg");
+            if (profile.userAvatar === '') {
+                setAvatarUrl("signin.png");
             } else {
                 setAvatarUrl(profile.userAvatar);
             }

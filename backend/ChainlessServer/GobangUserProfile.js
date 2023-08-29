@@ -1,5 +1,5 @@
-import contractJSON from '../ABI/GobangUserProfile.json';
-export default class GobangUserProfile {
+const contractJSON = require('../ABI/GobangUserProfile.json');
+class GobangUserProfile {
   constructor() {
      this.web3 = null;
      this.contract = null;

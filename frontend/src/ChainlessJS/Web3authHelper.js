@@ -8,14 +8,17 @@ export default class Web3authHelper {
         this.web3authProvider = null;
     }
     
+    // Get the web3 instance
     getWeb3authInstance() {
         return this.web3auth;
     }
 
+    // Get the authentication provider of the web3 instance
     getWeb3authInstanceProvider() {
         return this.web3authProvider;
     }
 
+    // Check if web3auth instance exists
     checkWeb3auth() {
         if (this.web3auth == null) {
             return false; 
@@ -24,6 +27,7 @@ export default class Web3authHelper {
         }
     }
 
+    // Get accounts of the user
     async getAccounts() {
         if (!this.checkWeb3auth()) {
             return null;
@@ -37,6 +41,7 @@ export default class Web3authHelper {
         }
     }
 
+    // Get the user information from web3auth
     async getUserInfo() {
         if (!this.checkWeb3auth()) {
             return null;
@@ -46,6 +51,7 @@ export default class Web3authHelper {
         }
     }
 
+    // Log in with web3auth
     async loginWeb3auth() {
         if (!this.checkWeb3auth()) {
             return false;
@@ -55,15 +61,23 @@ export default class Web3authHelper {
         }
     }
 
+    // Log out with web3auth
     async logoutWeb3auth() {
         if (!this.checkWeb3auth()) {
             return false;
         } else {
-            await this.web3auth.logout();
+            try {
+                await this.web3auth.logout();
+            }
+            catch {
+                console.log("Error while logging out...");
+                return false;
+            }
             return true;
         }
     }
     
+    // Create web3auth instance
     async createWeb3authLoginInstance(clientId, chainNamespace, chainId, rpcTarget) {
         const web3authInstance = new Web3Auth({
             clientId: clientId, // Get your Client ID from Web3Auth Dashboard
@@ -76,7 +90,6 @@ export default class Web3authHelper {
   
         const torusWalletAdapter = new TorusWalletAdapter({
             initParams: {
-                // type WhiteLabelParams
                 whiteLabel: {
                     theme: {
                         isDark: true,
@@ -98,6 +111,7 @@ export default class Web3authHelper {
         return web3authInstance;
     }
 
+    // Check if web3auth is connected
     isConnected() {
         if (!this.checkWeb3auth()) {
             return false;

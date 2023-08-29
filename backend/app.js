@@ -1,4 +1,3 @@
-// Backend code using Express.js and Socket.IO
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
