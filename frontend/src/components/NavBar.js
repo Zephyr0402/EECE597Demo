@@ -28,7 +28,6 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
     }, []);
 
     const handleHomeClick = () => {
-        // Change avatarUrl (or reset to default) when Home link is clicked
         const mainAvatarURL = localStorage.getItem('avatarUrl');
         setAvatarUrl(mainAvatarURL);
     };
@@ -81,12 +80,8 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
               // Convert the IPFS image URL to an HTTP URL
               httpImageUrl = ipfsImageUrl.replace('ipfs://', 'https://ipfs.io/ipfs/');
           }
-          
-
-          // Set the HTTP URL as the avatar
           setAvatarUrl(httpImageUrl);
           setWeb3Helper(web3Helper);
-          // setWeb3(web3Helper.getWeb3Instance());
           localStorage.setItem('avatarUrl', httpImageUrl);
           localStorage.setItem('isLoggedIn', 'true');
       }

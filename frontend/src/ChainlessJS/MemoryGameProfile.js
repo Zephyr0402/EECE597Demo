@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import contractJSON from '../ABI/MemoryGameProfile.json';
-export class MemoryGameProfile {
+export default class MemoryGameProfile {
   constructor() {
      this.web3 = null;
      this.contract = null;

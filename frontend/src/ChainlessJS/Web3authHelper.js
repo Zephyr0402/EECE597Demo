@@ -1,7 +1,7 @@
 import { Web3Auth } from "@web3auth/modal";
 import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
 
-export class Web3authHelper{
+export default class Web3authHelper {
 
     constructor() {
         this.web3auth = null;

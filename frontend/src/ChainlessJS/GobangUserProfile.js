@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import contractJSON from '../ABI/GobangUserProfile.json';
-export class GobangUserProfile {
+export default class GobangUserProfile {
   constructor() {
      this.web3 = null;
      this.contract = null;

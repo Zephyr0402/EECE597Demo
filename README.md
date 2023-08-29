@@ -10,7 +10,11 @@ The demo takes the form of a online game center platform, contains two games for
 
 <code>@web3auth/modal</code>
 
-# How to deploy smart contracts
+<code>@web3auth/torus-evm-adapter</code>
+
+<code>ipfs-http-client</code>
+
+# How to deploy smart contracts (Optional, the demo-used contracts are deployed in advanced)
 1. Instal npm dependencies
 
 <code>cd contracts/GobangUserProfile</code>
@@ -46,3 +50,7 @@ The demo takes the form of a online game center platform, contains two games for
 <code>node app.js</code>
 
 # How to run test
+
+<code>cd frontend</code>
+
+<code>npm test</code>

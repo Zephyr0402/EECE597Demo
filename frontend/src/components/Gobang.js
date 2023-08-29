@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import socketIOClient from "socket.io-client";
-import { GobangUserProfile } from '../ChainlessJS/GobangUserProfile'
+import GobangUserProfile from '../ChainlessJS/GobangUserProfile'
 
 const SIZE = 15;
 
@@ -14,7 +14,6 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
     const [isGameReady, setIsGameReady] = useState(false);
     const [contract, setContract] = useState(new GobangUserProfile());
     
-    // Individual states for user profile attributes
     const [userName, setUserName] = useState('');
     const [winningCount, setWinningCount] = useState(0);
     const [matchCount, setMatchCount] = useState(0);
@@ -146,6 +145,7 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
                             onChange={handleInputChange} 
                             name="userName" 
                             className="ml-2"
+                            placeholder={'User Name'}
                         />
                     </li>
                     <li className="list-group-item">
@@ -172,7 +172,7 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
                     </li>
                 </ul>
             </div>
-            <button onClick={handleButtonClick} className="btn btn-primary btn-block mt-3">Update profile</button>
+            <button onClick={handleButtonClick} className="btn btn-primary btn-block mt-3">Update Profile</button>
         </div>
     );
 }

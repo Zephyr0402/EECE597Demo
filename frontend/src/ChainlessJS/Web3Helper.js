@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 
-export class Web3Helper {
+export default class Web3Helper {
     constructor() {
         this.web3 = null;
         this.authProvider = null;

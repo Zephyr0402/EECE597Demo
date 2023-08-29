@@ -58,19 +58,12 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('joinGame', (gameId) => {
-    if(!games[gameId] || games[gameId].players.length >= 2) return;
-    games[gameId].players.push(socket.id);
-    socket.join(gameId);
-    io.to(gameId).emit('gameReady');
-  });
-
   socket.on('makeMove', ({ gameId, row, col }) => {
     let game = games[gameId];
     if(!game || game.currentPlayer !== (game.players[0] === socket.id ? 'Black' : 'White') || game.grid[row][col] !== null) return;
 
     game.grid[row][col] = game.currentPlayer;
-    game.currentPlayer = game.currentPlayer === 'Black' ? 'White' : 'Black'; // Swap players
+    game.currentPlayer = game.currentPlayer === 'Black' ? 'White' : 'Black'; 
     game.winner = checkWinner(game.grid);
 
     io.to(gameId).emit('gameUpdate', game);

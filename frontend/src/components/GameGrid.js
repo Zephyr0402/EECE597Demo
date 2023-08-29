@@ -13,8 +13,6 @@ function GameGrid() {
         if (!isLoggedIn) {
             setShowModal(true);
         } else {
-            // Redirect to the game page if the user is logged in
-            // window.location.href = `/game/${gameId}`;
             history.push(`/game/${gameId}`);
         }
     };
@@ -39,7 +37,7 @@ function GameGrid() {
               </Col>
             ))}
           </Row>
-          {/* Modal */}
+
           <Modal show={showModal} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>Login Required</Modal.Title>
