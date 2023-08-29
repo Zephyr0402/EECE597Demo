@@ -5,20 +5,20 @@ import gameList from '../data/games';
 import '../App.css';
 
 function GameGrid() {
-    const [showModal, setShowModal] = useState(false);
+    const [showLoginWarning, setShowLoginWarning] = useState(false);
     const history = useHistory();
 
     const handleGamePlay = (gameId) => {
         const isLoggedIn = localStorage.getItem('isLoggedIn');
         if (!isLoggedIn) {
-            setShowModal(true);
+            setShowLoginWarning(true);
         } else {
             history.push(`/game/${gameId}`);
         }
     };
 
     const handleClose = () => {
-        setShowModal(false);
+        setShowLoginWarning(false);
     };
 
     return (
@@ -38,7 +38,7 @@ function GameGrid() {
             ))}
           </Row>
 
-          <Modal show={showModal} onHide={handleClose}>
+          <Modal show={showLoginWarning} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>Login Required</Modal.Title>
             </Modal.Header>

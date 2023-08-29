@@ -5,12 +5,13 @@ import GobangUserProfile from '../ChainlessJS/GobangUserProfile'
 const SIZE = 15;
 
 function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
-    const [grid, setGrid] = useState(() => Array(SIZE).fill().map(() => Array(SIZE).fill(null)));
-    const [currentPlayer, setCurrentPlayer] = useState(null);
+    const [board, setBoard] = useState(() => Array(SIZE).fill().map(() => Array(SIZE).fill(null)));
     const [winner, setWinner] = useState(null);
     const [socket, setSocket] = useState(null);
     const [playerColor, setPlayerColor] = useState(null);
     const [isGameReady, setIsGameReady] = useState(false);
+    const [currentPlayer, setCurrentPlayer] = useState(null);
+    
     const [contract, setContract] = useState(new GobangUserProfile());
     
     const [userName, setUserName] = useState('');
@@ -18,7 +19,7 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
     const [matchCount, setMatchCount] = useState(0);
     const [rank, setRank] = useState(0);
 
-    const gameId = 1;
+    const gameId = "1";
 
     useEffect(() => {
         if (web3Helper && web3authHelper) {
@@ -39,7 +40,7 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
         newSocket.on('gameUpdate', game => {
             console.log('game update!');
             setPlayerColor(game.currentPlayer);
-            setGrid(game.grid);
+            setBoard(game.board);
             setCurrentPlayer(game.currentPlayer);
             setWinner(game.winner);
         });
@@ -79,7 +80,6 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
 
     const fetchUserProfile = async () => {
         try {
-            console.log(avatarUrl);
             const playerAccounts = await web3Helper.getAccounts();
             const profile = await contract.getUserProfile(playerAccounts[0]);
             let newAvatarURL = "signin.png";
@@ -88,7 +88,6 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
             }
             setUserName(profile[0]);
             setAvatarUrl(newAvatarURL);
-            console.log(avatarUrl);
             setWinningCount(profile[2]);
             setMatchCount(profile[3]);
             setRank(profile[4]);
@@ -111,7 +110,7 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
             alert('The game is not ready yet. Please wait for another player to join.');
             return;
         }
-        if (socket == null || grid[row][col] !== null || winner !== null || playerColor !== currentPlayer) return;
+        if (socket == null || board[row][col] !== null || winner !== null || playerColor !== currentPlayer) return;
         socket.emit('makeMove', { gameId, row, col });
     };
 
@@ -124,7 +123,7 @@ function Gobang({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl }) {
     return (
         <div className="container mt-5">
             <div className="jumbotron text-center bg-success text-white">
-                {grid.map((row, rowIndex) => (
+                {board.map((row, rowIndex) => (
                     <div key={rowIndex} className="d-flex justify-content-center">
                         {row.map((value, colIndex) => (
                             <Cell 

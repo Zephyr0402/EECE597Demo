@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
         // Second player joining the existing game
         console.log('Second player joining the existing game');
         games[gameId].players.push(socket.id);
-        // Second player is 'White'
+        // Second player is White chess piece player
         games[gameId].currentPlayer = 'White';
         socket.join(gameId);
         // Notify players that game is ready
@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
       games[gameId] = {
         players: [socket.id],
         grid: Array(SIZE).fill().map(() => Array(SIZE).fill(null)),
-        currentPlayer: 'Black',  // First player is 'Black'
+        currentPlayer: 'Black',  // First player is 'Black chess piece player'
         winner: null
       };
       socket.join(gameId);
@@ -79,24 +79,24 @@ io.on('connection', (socket) => {
   });
 });
 
+// Check if there is a winner based on the current board
 function checkWinner(grid) {
   for(let i = 0; i < SIZE; i++) {
     for(let j = 0; j < SIZE; j++) {
       if(grid[i][j] !== null && (
-        checkLine(grid, i, j, 1, 0, grid[i][j]) ||
-        checkLine(grid, i, j, 0, 1, grid[i][j]) ||
-        checkLine(grid, i, j, 1, 1, grid[i][j]) ||
-        checkLine(grid, i, j, 1, -1, grid[i][j])
+        checkEachLine(grid, i, j, 1, 0, grid[i][j]) ||
+        checkEachLine(grid, i, j, 0, 1, grid[i][j]) ||
+        checkEachLine(grid, i, j, 1, 1, grid[i][j]) ||
+        checkEachLine(grid, i, j, 1, -1, grid[i][j])
       )) {
         return grid[i][j];
       }
     }
   }
-
   return null;
 }
 
-function checkLine(grid, x, y, dx, dy, color) {
+function checkEachLine(grid, x, y, dx, dy, color) {
   for(let i = 0; i < WIN_LENGTH; i++) {
     const nx = x + dx * i;
     const ny = y + dy * i;
@@ -104,7 +104,6 @@ function checkLine(grid, x, y, dx, dy, color) {
       return false;
     }
   }
-
   return true;
 }
 

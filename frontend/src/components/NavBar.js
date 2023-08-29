@@ -12,11 +12,6 @@ function NavBar({ web3Helper, web3authHelper, setWeb3Helper, setWeb3authHelper, 
     const rpcTarget = "https://rpc.ankr.com/polygon_mumbai";
 
     useEffect(() => {
-        console.log("Avatar URL changed in Navbar:", avatarUrl);
-    }, [avatarUrl]);
-
-
-    useEffect(() => {
         const init = async () => {
             try {
                 // Check if user is logged in

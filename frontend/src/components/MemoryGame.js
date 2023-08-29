@@ -4,17 +4,20 @@ import MemoryGameProfile from '../ChainlessJS/MemoryGameProfile';
 function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl, testContract }) {
     const cards = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D'];
     const [shuffledCards, setShuffledCards] = useState([]);
-    const [flippedIndices, setFlippedIndices] = useState([]);
-    const [matchedIndices, setMatchedIndices] = useState([]);
+    const [flippedCardIndices, setFlippedCardIndices] = useState([]);
+    const [matchedCardIndices, setMatchedCardIndices] = useState([]);
+    
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
+    
     const [gameActive, setGameActive] = useState(false);
+    
     const [userName, setUserName] = useState("");
     const [completionTime, setCompletionTime] = useState(null);
     const [contract, setContract] = useState(null);
 
     useEffect(() => {
-        if (gameActive && matchedIndices.length === cards.length) {
+        if (gameActive && matchedCardIndices.length === cards.length) {
             const end = new Date();
             setEndTime(end);
             setGameActive(false);
@@ -22,7 +25,7 @@ function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl, testC
             const completionTime = Math.floor((end - startTime) / 1000);
             updateCompletionTime(completionTime);
         }
-    }, [matchedIndices]);
+    }, [matchedCardIndices]);
 
     useEffect(() => {
         if (web3Helper && web3authHelper) {
@@ -98,30 +101,35 @@ function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl, testC
         setStartTime(new Date());
         setEndTime(null);
         setGameActive(true);
-        setShuffledCards(shuffle([...cards]));
-        setFlippedIndices([]);
-        setMatchedIndices([]);
+        setShuffledCards(shufflingCards([...cards]));
+        setFlippedCardIndices([]);
+        setMatchedCardIndices([]);
     }  
   
     const abortGame = () => {
         setGameActive(false);
-        setFlippedIndices([]);
-        setMatchedIndices([]);
         setShuffledCards([]);
+        setFlippedCardIndices([]);
+        setMatchedCardIndices([]);
     }  
   
     const handleCardClick = (index) => {
-        if (!gameActive || flippedIndices.includes(index) || matchedIndices.includes(index)) return;  
-        if (flippedIndices.length === 2) {
-            setTimeout(() => setFlippedIndices([index]), 1000);
+        if (!gameActive) {
+            return;
+        } 
+        if (flippedCardIndices.includes(index) || matchedCardIndices.includes(index)) {
+            return; 
+        }
+        if (flippedCardIndices.length === 2) {
+            setTimeout(() => setFlippedCardIndices([index]), 1000);
         } else {
-            setFlippedIndices(prev => [...prev, index]);
+            setFlippedCardIndices(prevFlippedCardIndices => [...prevFlippedCardIndices, index]);
         }  
-        if (flippedIndices.length === 1) {
-            const [firstCardIndex] = flippedIndices;
+        if (flippedCardIndices.length === 1) {
+            const [firstCardIndex] = flippedCardIndices;
             if (shuffledCards[firstCardIndex] === shuffledCards[index]) {
-                setMatchedIndices(prev => [...prev, firstCardIndex, index]);
-                setFlippedIndices([]);
+                setMatchedCardIndices(prevFlippedCardIndices => [...prevFlippedCardIndices, firstCardIndex, index]);
+                setFlippedCardIndices([]);
           }
         }
     }  
@@ -156,14 +164,14 @@ function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl, testC
                                     style={{ width: '100px', height: '100px', lineHeight: '100px' }}
                                     onClick={() => handleCardClick(index)}
                                 >
-                                    {(flippedIndices.includes(index) || matchedIndices.includes(index)) ? card : "?"}
+                                    {(flippedCardIndices.includes(index) || matchedCardIndices.includes(index)) ? card : "?"}
                                 </div>
                             ))}
                         </div>
                     </>
                 ) : (
                     <>
-                        {matchedIndices.length === cards.length ? (
+                        {matchedCardIndices.length === cards.length ? (
                             <div className="game-summary">
                                 <p className="mb-3">You've finished in {elapsedTime} seconds!</p>
                                 <button onClick={startGame} className="btn btn-success">Play Again</button>
@@ -179,12 +187,12 @@ function MemoryGame({ web3Helper, web3authHelper, avatarUrl, setAvatarUrl, testC
 
 }
 
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
+function shufflingCards(cardsArray) {
+    for (let i = cardsArray.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        [cardsArray[i], cardsArray[j]] = [cardsArray[j], cardsArray[i]];
     }
-    return array;
+    return cardsArray;
 }
 
 export default MemoryGame;

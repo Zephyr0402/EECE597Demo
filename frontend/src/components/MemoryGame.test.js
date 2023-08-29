@@ -5,10 +5,10 @@ import Web3Helper from '../ChainlessJS/Web3Helper';
 import MemoryGameProfile from '../ChainlessJS/MemoryGameProfile';
 
 jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: jest.fn(),
-  }),
+    ...jest.requireActual('react-router-dom'),
+    useHistory: () => ({
+      push: jest.fn(),
+    }),
 }));
 
 jest.mock('../ChainlessJS/Web3Helper');
@@ -61,7 +61,7 @@ describe('<MemoryGame />', () => {
         mockContract = new MemoryGameProfile();
     });
 
-    test('should render and handle card clicks', async () => {
+    test('Check if the component render properly and can handle card clicks', async () => {
         const { getByText, getAllByText } = render(
             <MemoryGame />
         );
@@ -74,7 +74,7 @@ describe('<MemoryGame />', () => {
         });
     });
 
-    test('renders without crashing', async () => {
+    test('Check if the component can render without crashing when adding props', async () => {
         await act(async () => {
             render(
                 <MemoryGame web3Helper={mockWeb3Helper} web3authHelper={mockWeb3authHelper} avatarUrl='avatar.jpg' setAvatarUrl={jest.fn()} testContract={mockContract} />
@@ -83,7 +83,8 @@ describe('<MemoryGame />', () => {
         const userProfileText = await screen.findByText('User Profile');
         expect(userProfileText).toBeInTheDocument();
     });
-    test('should display user profile correctly', async () => {
+    
+    test('Check if the user profile is displayed correctly', async () => {
         await act(async () => {
             render(
                 <MemoryGame web3Helper={mockWeb3Helper} web3authHelper={mockWeb3authHelper} avatarUrl='avatar.jpg' setAvatarUrl={jest.fn()} testContract={mockContract} />
@@ -94,7 +95,8 @@ describe('<MemoryGame />', () => {
         expect(userName).toBeInTheDocument();
         expect(userAvatar).toBeInTheDocument();
     });
-    test('should display previous game results', async () => {
+
+    test('Check if the previous game result is displayed', async () => {
         await act(async () => {
             render(
                 <MemoryGame web3Helper={mockWeb3Helper} web3authHelper={mockWeb3authHelper} avatarUrl='avatar.jpg' setAvatarUrl={jest.fn()} testContract={mockContract} />
@@ -104,7 +106,7 @@ describe('<MemoryGame />', () => {
         expect(gameResult).toBeInTheDocument();
     });
 
-    test('updates profile correctly', async () => {
+    test('Check if the user can update the profile correctly', async () => {
         const consoleSpy = jest.spyOn(console, 'error');
         
         await act(async () => {
