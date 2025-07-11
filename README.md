@@ -1,6 +1,6 @@
 # EECE597Demo
 
-This repo's code is based on the work of ChainlessJS and ChainlessServer. The ChainlessJS generated the skeleton code of the frontend, which is based on ReactJS. The ChainlessServer generated the skeleton code of backend, which is based on ExpressJS. The purpose of this project is to demonstrate the work of these two projects, proving that with these two projects, the game developer don't need to learn web3 related knowledge to do web3 game developments.
+This repo's code is based on the work of [ChainlessJS](https://github.com/Zephyr0402/ChainlessJS) and [ChainlessServer](https://github.com/Zephyr0402/ChainlessServer). The ChainlessJS generated the skeleton code of the frontend, which is based on ReactJS. The ChainlessServer generated the skeleton code of backend, which is based on ExpressJS. The purpose of this project is to demonstrate the work of these two projects, proving that with these two projects, the game developer don't need to learn web3 related knowledge to do web3 game developments.
 
 The demo takes the form of a online game center platform, contains two games for now: Gobang game and memory game. The user uses web3auth as login method and the two games are asscoiated with their own smart contract.
 
